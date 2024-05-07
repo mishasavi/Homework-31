@@ -1,11 +1,26 @@
-const Form = () => {
+import React from "react";
 
-    const getCity = e => {
-        e.preventDefault();
-        console.log(e.currentTarget.city.value.trim());
-        e.currentTarget.city.value = "";
-
+class Form extends React.Component {
+    constructor() {
+        super();
     }
+
+    render() {
+
+        const getCity = e => {
+            e.preventDefault();
+            let myCity = e.currentTarget.city.value.trim();
+            fetch (`https://api.openweathermap.org/data/2.5/weather?q=${myCity}&appid=e83d9ba8613929725d60f4c059236ceb&units=metric`)
+                .then(response => response.json())
+                .then(data => {
+                    this.props.updateWeather(data);})
+                .catch(e => console.log(e));
+
+            e.currentTarget.city.value = "";
+        }
+
+
+
 
     return (
         <form onSubmit={getCity}>
@@ -13,6 +28,7 @@ const Form = () => {
             <button type={'submit'}>Get weather</button>
         </form>
     );
-};
+    }
+}
 
 export default Form;
